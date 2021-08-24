@@ -1398,8 +1398,15 @@
     [zoom >= 15][name != null],
     [zoom >= 16] {
       marker-file: url('symbols/waterfall.svg');
+      marker-placement: interior;
       marker-clip: false;
       marker-fill: @water-text;
+
+
+      
+      marker-line-color: #FFF; /* white */
+      marker-line-width: 1;
+      marker-line-opacity: 1;
     }
   }
 
@@ -1835,13 +1842,15 @@
     text-size: @standard-font-size;
     text-wrap-width: @standard-wrap-width;
     text-line-spacing: @standard-line-spacing-size;
-    text-fill: darken(@landform-color, 30%);
-    [feature = 'natural_volcano'] { text-fill: #d40000; }
-    text-dy: 7;
-    [feature = 'tourism_viewpoint'] { text-dy: 11; }
+    text-fill: #000;
+    [feature = 'natural_volcano'] { text-fill: #b10000; }
+    text-dy: 15;
+    [feature = 'tourism_viewpoint'] { text-dy: 12; }
     text-face-name: @standard-font;
-    text-halo-radius: @standard-halo-radius;
+    text-halo-radius: 2.5;
     text-halo-fill: @standard-halo-fill;
+    text-placement: interior;
+
   }
 
   [feature = 'natural_cape'][zoom >= 14] {
@@ -1878,11 +1887,13 @@
       text-size: @standard-font-size;
       text-wrap-width: @standard-wrap-width;
       text-line-spacing: @standard-line-spacing-size;
-      text-fill: @water-text;
+      text-fill: #000;
       text-dy: 10;
       text-face-name: @standard-font;
-      text-halo-radius: @standard-halo-radius;
+      text-halo-radius: 2.5;
       text-halo-fill: @standard-halo-fill;
+      text-placement: interior;
+
     }
   }
 

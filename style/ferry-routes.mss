@@ -28,3 +28,62 @@
     text-dy: -8;
   }
 }
+
+
+#rrr {
+  [zoom >= 14] {
+    line/line-color: #e64525;
+    line/line-width: 2.5;
+    line/line-dasharray: 20,5;
+  }
+}
+#yyy {
+  [zoom >= 14] {
+    
+    line/line-color: #ffe034;
+
+    line/line-width: 2.5;
+    line/line-dasharray: 20,5;
+    line/line-join: round;
+        line/line-cap: round;
+  }
+}
+
+
+#bbb {
+  [zoom >= 14] {
+    
+    line/line-color: #444444;
+
+    line/line-width: 2.5;
+    line/line-dasharray: 20,5;
+  }
+}
+
+
+#lll {
+  [zoom >= 14] {
+    
+    line/line-color: #0766c7;
+
+    line/line-width: 2.5;
+    line/line-dasharray: 16,6;
+    line/line-join: round;
+        line/line-cap: round;
+  }
+}
+
+
+
+#ggg {
+  [zoom >= 14] {
+    
+    line/line-color: #409716;
+
+    line/line-width: 2.5;
+    line/line-dasharray: 20,5;
+    line/line-join: round;
+        line/line-cap: round;
+  }
+}
+

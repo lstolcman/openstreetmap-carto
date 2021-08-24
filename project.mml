@@ -12,6 +12,7 @@ center:
   - 0
   - 4
 format: png
+quality: 100
 interactivity: false
 minzoom: 0
 maxzoom: 22
@@ -622,6 +623,19 @@ Layer:
           WHERE route = 'ferry'
             AND osm_id > 0
         ) AS ferry_routes
+    properties:
+      minzoom: 8
+  - id: hiking
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_line
+          WHERE route = 'hiking'
+        ) AS hiking
     properties:
       minzoom: 8
   - id: turning-circle-casing
@@ -2089,6 +2103,84 @@ Layer:
         ) AS interpolation
     properties:
       minzoom: 17
+
+  - id: yyy
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_line
+          WHERE "osmc:symbol" = 'yellow:white:yellow_bar'
+        ) AS yyy
+    properties:
+      minzoom: 14
+
+
+  - id: rrr
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_line
+          WHERE "osmc:symbol" = 'red:white:red_bar'
+        ) AS rrr
+    properties:
+      minzoom: 14
+
+
+  - id: lll
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_line
+          WHERE "osmc:symbol" = 'blue:white:blue_bar'
+        ) AS lll
+    properties:
+      minzoom: 14
+
+
+  - id: ggg
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_line
+          WHERE "osmc:symbol" = 'green:white:green_bar'
+        ) AS ggg
+    properties:
+      minzoom: 14
+
+
+  - id: bbb
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_line
+          WHERE "osmc:symbol" = 'black:white:black_bar'
+        ) AS bbb
+    properties:
+      minzoom: 14
+
+
+
+    
   - id: addresses
     geometry: point
     <<: *extents

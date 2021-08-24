@@ -316,9 +316,9 @@
         text-wrap-width: 95; // 5.0 em
         text-line-spacing: -0.95; // -0.05 em
       }
-      text-fill: @water-text;
+      text-fill: #000;
       text-face-name: @oblique-fonts;
-      text-halo-radius: @standard-halo-radius;
+      text-halo-radius: 2;
       text-halo-fill: @standard-halo-fill;
       text-placement: interior;
     }
