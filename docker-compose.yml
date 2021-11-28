@@ -20,7 +20,7 @@ services:
       context: .
       dockerfile: Dockerfile.db
     ports:
-      - "127.0.0.1:5432:5432"
+      - "5432:5432"
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
       - PG_WORK_MEM
@@ -37,8 +37,8 @@ services:
     environment:
       - PGHOST=db
       - PGUSER=postgres
-      - PG_WORK_MEM
-      - PG_MAINTENANCE_WORK_MEM
-      - OSM2PGSQL_CACHE
-      - OSM2PGSQL_NUMPROC
+      - PG_WORK_MEM=4GB
+      - PG_MAINTENANCE_WORK_MEM=8GB
+      - OSM2PGSQL_CACHE=4096
+      - OSM2PGSQL_NUMPROC=12
       - OSM2PGSQL_DATAFILE

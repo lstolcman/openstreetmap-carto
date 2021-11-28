@@ -2127,9 +2127,22 @@ Layer:
       table: |-
         (SELECT
             way
-          FROM planet_osm_line
-          WHERE "osmc:symbol" = 'red:white:red_bar'
+          FROM planet_osm_red2
         ) AS rrr
+    properties:
+      minzoom: 14
+
+
+  - id: rrrbbb
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_red_blue_intersection
+        ) AS rrrbbb
     properties:
       minzoom: 14
 

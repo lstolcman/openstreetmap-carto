@@ -37,6 +37,21 @@
     line/line-dasharray: 20,5;
   }
 }
+#rrrbbb {
+  [zoom >= 14] {
+    line/line-color: #e64525;
+    line/line-width: 2.5;
+    line/line-dasharray: 20,5;
+    line/line-offset: -2;
+    line2/line-color: #0766c7;
+    line2/line-width: 2.5;
+    line2/line-dasharray: 20,5;
+    line2/line-offset: 2;
+  }
+}
+
+
+
 #yyy {
   [zoom >= 14] {
     
@@ -45,7 +60,6 @@
     line/line-width: 2.5;
     line/line-dasharray: 20,5;
     line/line-join: round;
-        line/line-cap: round;
   }
 }
 
@@ -60,18 +74,6 @@
   }
 }
 
-
-#lll {
-  [zoom >= 14] {
-    
-    line/line-color: #0766c7;
-
-    line/line-width: 2.5;
-    line/line-dasharray: 16,6;
-    line/line-join: round;
-        line/line-cap: round;
-  }
-}
 
 
 

@@ -445,51 +445,25 @@ Then all three layers are added to the rendering with comp-op: darken, so that t
   }
 }
 
-#admin-text[zoom >= 11][way_pixels >= 196000] {
-  [admin_level = '1'][way_pixels >= 360000],
-  [admin_level = '2'][way_pixels >= 360000],
-  [zoom >= 11][admin_level = '3'],
-  [zoom >= 11][admin_level = '4'],
-  [zoom >= 11][admin_level = '5'],
-  [zoom >= 12][admin_level = '6'],
-  [zoom >= 13][admin_level = '7'],
-  [zoom >= 14][admin_level = '8'],
-  [zoom >= 15][admin_level = '9'],
-  [zoom >= 16] {
-    text-name: "[name]";
-    text-face-name: @book-fonts;
-    text-fill: @state-labels;
-    [admin_level = '6'] { text-fill: @county-labels; }
-    text-halo-radius: @standard-halo-radius;
-    text-halo-fill: @standard-halo-fill;
-    text-largest-bbox-only: false;
-    text-placement: line;
-    text-spacing: 750;
-    text-repeat-distance: 250;
-    text-margin: 10;
-    text-clip: true;
-    text-vertical-alignment: middle;
-    text-dy: -10;
-  }
-}
 
 #protected-areas-text[zoom >= 13][way_pixels > 192000] {
   text-name: "[name]";
+  text-size: 14;
   text-face-name: @book-fonts;
-  text-fill: @protected-area;
+  text-fill: #0e2f1e;
   [boundary='aboriginal_lands'] {
     text-fill: @aboriginal;
   }
-  text-halo-radius: @standard-halo-radius;
-  text-halo-fill: @standard-halo-fill;
+  text-halo-radius: 1.5*@standard-halo-radius;
+  text-halo-fill: #ffffff;
   text-largest-bbox-only: false;
   text-placement: line;
-  text-spacing: 750;
-  text-repeat-distance: 250;
+  text-spacing: 50;
+  text-repeat-distance: 400;
   text-margin: 10;
   text-clip: true;
   text-vertical-alignment: middle;
-  text-dy: -10;
+  text-dy: -20;
 }
 
 #protected-areas {
@@ -509,7 +483,7 @@ Then all three layers are added to the rendering with comp-op: darken, so that t
       // inner line
       ::wideline {
         opacity: 0.15;
-        line-width: 3.6;
+        line-width: 10;
         // Unlike planet_osm_line, planet_osm_polygon does not preserves the
         // original direction of the OSM way: Following OGS at
         // https://www.opengeospatial.org/standards/sfa always at the left
@@ -524,11 +498,11 @@ Then all three layers are added to the rendering with comp-op: darken, so that t
         line-join: round;
         line-cap: round;
         [zoom >= 12] {
-          line-width: 4;
+          line-width: 15;
           line-offset: -1;
         }
         [zoom >= 14] {
-          line-width: 6;
+          line-width: 18;
           line-offset: -2;
         }
       }
