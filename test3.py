@@ -58,17 +58,6 @@ cur.execute(q)
 conn.commit()
 
 
-
-q = r'''
-SELECT
-(st_dump(ST_Difference(a.way, b.way))).geom
-FROM
-(select st_union(way) as way from planet_osm_line where "osmc:symbol" like 'red%:white:%_bar') as a,
-(select * from planet_osm_red_blue_intersection) as b
-'''
-cur.execute(q);conn.commit()
-red_only_multilinestring = cur.fetchall()
-
 q = r'''
 insert into public.planet_osm_red (way)
 
@@ -81,9 +70,6 @@ FROM
 '''
 cur.execute(q)
 conn.commit()
-
-
-
 
 
 
@@ -114,3 +100,50 @@ cur.execute(q)
 conn.commit()
 
 
+
+
+
+
+'''
+all combinations of lines are:
+
+In [934]: list(itertools.combinations(['red','green','blue', 'yellow', 'black'],2))
+Out[934]:
+[('red', 'green'),
+ ('red', 'blue'),
+ ('red', 'yellow'),
+ ('red', 'black'),
+ ('green', 'blue'),
+ ('green', 'yellow'),
+ ('green', 'black'),
+ ('blue', 'yellow'),
+ ('blue', 'black'),
+ ('yellow', 'black')]
+
+In [935]: list(itertools.combinations(['red','green','blue', 'yellow', 'black'],3))
+Out[935]:
+[('red', 'green', 'blue'),
+ ('red', 'green', 'yellow'),
+ ('red', 'green', 'black'),
+ ('red', 'blue', 'yellow'),
+ ('red', 'blue', 'black'),
+ ('red', 'yellow', 'black'),
+ ('green', 'blue', 'yellow'),
+ ('green', 'blue', 'black'),
+ ('green', 'yellow', 'black'),
+ ('blue', 'yellow', 'black')]
+
+In [936]: list(itertools.combinations(['red','green','blue', 'yellow', 'black'],4))
+Out[936]:
+[('red', 'green', 'blue', 'yellow'),
+ ('red', 'green', 'blue', 'black'),
+ ('red', 'green', 'yellow', 'black'),
+ ('red', 'blue', 'yellow', 'black'),
+ ('green', 'blue', 'yellow', 'black')]
+
+In [937]: list(itertools.combinations(['red','green','blue', 'yellow', 'black'],5))
+Out[937]: [('red', 'green', 'blue', 'yellow', 'black')]
+
+In [938]:
+
+'''
