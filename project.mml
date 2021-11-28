@@ -2127,7 +2127,7 @@ Layer:
       table: |-
         (SELECT
             way
-          FROM planet_osm_red2
+          FROM planet_osm_red
         ) AS rrr
     properties:
       minzoom: 14

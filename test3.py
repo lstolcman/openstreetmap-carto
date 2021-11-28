@@ -30,59 +30,36 @@ conn.commit()
 
 q = r'''
 INSERT INTO
-    public.planet_osm_red_blue_intersection (way)
-SELECT
-    ST_LineMerge(ST_Intersection(a.way,b.way))
-FROM 
-    (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" LIKE 'red%:white:%_bar')) AS way) AS a,
-    (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" LIKE 'blue%:white:%_bar')) AS way) AS b
-WHERE
-    ST_Intersects(a.way, b.way)
+    public.planet_osm_red_blue_intersection ("osmc:symbol", way)
+VALUES (
+    'red:white:red_bar;blue:white:blue_bar',(
+    SELECT
+        ST_LineMerge(ST_Intersection(a.way,b.way))
+    FROM 
+        (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" LIKE 'red%:white:%_bar')) AS way) AS a,
+        (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" LIKE 'blue%:white:%_bar')) AS way) AS b
+    WHERE
+        ST_Intersects(a.way, b.way)
+    )
+)
 '''
 # conn.commit();cur.execute(q);conn.commit();z = cur.fetchall();print(z)
 cur.execute(q);conn.commit()
-red_blue_intersection_multilinestring = cur.fetchall()
+# red_blue_intersection_multilinestring = cur.fetchall()
 
 # create new table - for blue-red intersections
 q = 'DROP TABLE planet_osm_red;'
 cur.execute(q)
 conn.commit()
 
+
+
+q = 'DROP TABLE planet_osm_red;'
+cur.execute(q)
+conn.commit()
+
 q = r'''
 CREATE TABLE planet_osm_red
-(
-  osm_id SERIAL,
-  "osmc:symbol" text,
-   way geometry(LineString,3857)
-)
-'''
-cur.execute(q)
-conn.commit()
-
-
-q = r'''
-INSERT INTO
-    public.planet_osm_red (way)
-SELECT
-    (ST_Dump(ST_Difference(a.way, b.way))).geom
-FROM
-    (SELECT ST_Union(way) as way FROM planet_osm_line WHERE "osmc:symbol" LIKE 'red%:white:%_bar') AS a,
-    (SELECT * FROM planet_osm_red_blue_intersection) AS b
-
-'''
-cur.execute(q)
-conn.commit()
-
-
-
-
-
-q = 'DROP TABLE planet_osm_red2;'
-cur.execute(q)
-conn.commit()
-
-q = r'''
-CREATE TABLE planet_osm_red2
 (
   osm_id SERIAL,
   "osmc:symbol" text,
@@ -94,11 +71,12 @@ conn.commit()
 
 q = r'''
 INSERT INTO
-    public.planet_osm_red2 (way)
+    public.planet_osm_red (way)
 SELECT
-    St_LineMerge(ST_Union(b.way))
+    St_LineMerge(ST_Difference(a.way, b.way))
 FROM
-    (SELECT way FROM planet_osm_red) AS b
+    (SELECT ST_Union(way) as way FROM planet_osm_line WHERE "osmc:symbol" LIKE 'red%:white:%_bar') AS a,
+    (SELECT * FROM planet_osm_red_blue_intersection) AS b
 '''
 cur.execute(q)
 conn.commit()
