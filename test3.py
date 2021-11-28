@@ -36,8 +36,8 @@ VALUES (
     SELECT
         ST_LineMerge(ST_Intersection(a.way,b.way))
     FROM 
-        (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" = 'red:white:red_bar')) AS way) AS a,
-        (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" = 'blue:white:blue_bar')) AS way) AS b
+        (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = 'red:white:red_bar')) AS way) AS a,
+        (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = 'blue:white:blue_bar')) AS way) AS b
     WHERE
         ST_Intersects(a.way, b.way)
     )
@@ -48,12 +48,6 @@ cur.execute(q);conn.commit()
 # red_blue_intersection_multilinestring = cur.fetchall()
 
 # create new table - for blue-red intersections
-q = 'DROP TABLE planet_osm_red;'
-cur.execute(q)
-conn.commit()
-
-
-
 q = 'DROP TABLE planet_osm_red;'
 cur.execute(q)
 conn.commit()
