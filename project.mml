@@ -2104,7 +2104,12 @@ Layer:
     properties:
       minzoom: 17
 
-  - id: yyy
+
+
+
+
+
+  - id: black_bar
     geometry: linestring
     <<: *extents
     Datasource:
@@ -2112,84 +2117,89 @@ Layer:
       table: |-
         (SELECT
             way
-          FROM planet_osm_line
-          WHERE "osmc:symbol" = 'yellow:white:yellow_bar'
-        ) AS yyy
-    properties:
-      minzoom: 14
-
-
-  - id: rrr
-    geometry: linestring
-    <<: *extents
-    Datasource:
-      <<: *osm2pgsql
-      table: |-
-        (SELECT
-            way
-          FROM planet_osm_red
-        ) AS rrr
-    properties:
-      minzoom: 14
-
-
-  - id: rrrbbb
-    geometry: linestring
-    <<: *extents
-    Datasource:
-      <<: *osm2pgsql
-      table: |-
-        (SELECT
-            way
-          FROM planet_osm_red_blue_intersection
-        ) AS rrrbbb
-    properties:
-      minzoom: 14
-
-
-  - id: lll
-    geometry: linestring
-    <<: *extents
-    Datasource:
-      <<: *osm2pgsql
-      table: |-
-        (SELECT
-            way
-          FROM planet_osm_line
-          WHERE "osmc:symbol" = 'blue:white:blue_bar'
-        ) AS lll
-    properties:
-      minzoom: 14
-
-
-  - id: ggg
-    geometry: linestring
-    <<: *extents
-    Datasource:
-      <<: *osm2pgsql
-      table: |-
-        (SELECT
-            way
-          FROM planet_osm_line
-          WHERE "osmc:symbol" = 'green:white:green_bar'
-        ) AS ggg
-    properties:
-      minzoom: 14
-
-
-  - id: bbb
-    geometry: linestring
-    <<: *extents
-    Datasource:
-      <<: *osm2pgsql
-      table: |-
-        (SELECT
-            way
-          FROM planet_osm_line
+          FROM planet_osm_bars
           WHERE "osmc:symbol" = 'black:white:black_bar'
-        ) AS bbb
+        ) AS black_bar
     properties:
       minzoom: 14
+
+  - id: blue_bar
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_bars
+          WHERE "osmc:symbol" = 'blue:white:blue_bar'
+        ) AS blue_bar
+    properties:
+      minzoom: 14
+
+  - id: green_bar
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_bars
+          WHERE "osmc:symbol" = 'green:white:green_bar'
+        ) AS green_bar
+    properties:
+      minzoom: 14
+
+  - id: red_bar
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_bars
+          WHERE "osmc:symbol" = 'red:white:red_bar'
+        ) AS red_bar
+    properties:
+      minzoom: 14
+
+  - id: yellow_bar
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_bars
+          WHERE "osmc:symbol" = 'yellow:white:yellow_bar'
+        ) AS yellow_bar
+    properties:
+      minzoom: 14
+
+
+  - id: blue_red_bar
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_bars
+          WHERE "osmc:symbol" = 'red:white:red_bar;blue:white:blue_bar'
+        ) AS blue_red_bar
+    properties:
+      minzoom: 14
+
+
+
+
+
+
+
 
 
 

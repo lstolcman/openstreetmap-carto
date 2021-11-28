@@ -1,9 +1,9 @@
 '''
-script creates a new table called planet_osm_red_blue_intersection with a multilinestrings of intersectiojns between red and blue bar
+script creates a new table called planet_osm_bars with a multilinestrings of intersectiojns between red and blue bar
 '''
 
 
-
+import itertools
 import psycopg2
 conn = psycopg2.connect("dbname=gis user=postgres password='postgres'")
 
@@ -12,11 +12,11 @@ cur = conn.cursor()
 
 
 # create new table - for blue-red intersections
-q = 'DROP TABLE planet_osm_red_blue_intersection;'
+q = 'DROP TABLE planet_osm_bars;'
 cur.execute(q)
 conn.commit()
 q = r'''
-CREATE TABLE planet_osm_red_blue_intersection
+CREATE TABLE planet_osm_bars
 (
   osm_id SERIAL,
   "osmc:symbol" text,
@@ -27,52 +27,54 @@ cur.execute(q)
 conn.commit()
 
 
+colors = ['red','green','blue', 'yellow', 'black']
 
-q = r'''
-INSERT INTO
-    public.planet_osm_red_blue_intersection ("osmc:symbol", way)
-VALUES (
-    'red:white:red_bar',(
-    SELECT
-        ST_LineMerge(ST_Difference(a.way,b.way))
-    FROM 
-        (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = 'red:white:red_bar')) AS way) AS a,
-        (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" != 'red:white:red_bar')) AS way) AS b
+bars_colors = [f'{color}:white:{color}_bar' for color in colors]
+
+for bar_color in bars_colors:
+    print(f'{bar_color=}')
+    q = f'''
+    INSERT INTO
+        public.planet_osm_bars ("osmc:symbol", way)
+    VALUES (
+        '{bar_color}',(
+        SELECT
+            ST_LineMerge(ST_Difference(a.way,b.way))
+        FROM 
+            (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bar_color}')) AS way) AS a,
+            (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" != '{bar_color}')) AS way) AS b
+        )
     )
-)
-'''
-# conn.commit();cur.execute(q);conn.commit();z = cur.fetchall();print(z)
-cur.execute(q);conn.commit()
+    '''
+    # conn.commit();cur.execute(q);conn.commit();z = cur.fetchall();print(z)
+    cur.execute(q);conn.commit()
 # red_blue_intersection_multilinestring = cur.fetchall()
 
-# create new table - for blue-red intersections
-q = 'DROP TABLE planet_osm_red;'
-cur.execute(q)
-conn.commit()
 
-q = r'''
-CREATE TABLE planet_osm_red
-(
-  osm_id SERIAL,
-  "osmc:symbol" text,
-   way geometry(MultiLineString,3857)
-)
-'''
-cur.execute(q)
-conn.commit()
 
-q = r'''
-INSERT INTO
-    public.planet_osm_red (way)
-SELECT
-    St_LineMerge(ST_Difference(a.way, b.way))
-FROM
-    (SELECT ST_Union(way) as way FROM planet_osm_line WHERE "osmc:symbol" = 'red:white:red_bar') AS a,
-    (SELECT * FROM planet_osm_red_blue_intersection) AS b
-'''
-cur.execute(q)
-conn.commit()
+## not quite working, PoC!
 
+bars_comb2 = list(itertools.combinations(bars_colors,2))
+bars_comb2 = [('red:white:red_bar', 'blue:white:blue_bar')]
+
+for bar_color1, bar_color2 in bars_comb2:
+    bar_color_combined = f'{bar_color1};{bar_color2}'
+    print(f'{bar_color_combined=}')
+    q = f'''
+    INSERT INTO
+        public.planet_osm_bars ("osmc:symbol", way)
+    VALUES (
+        '{bar_color_combined}',(
+        SELECT
+            ST_LineMerge(ST_Intersection(a.way,b.way))
+        FROM 
+            (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bar_color1}')) AS way) AS a,
+            (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bar_color2}')) AS way) AS b
+        )
+    )
+    '''
+    # conn.commit();cur.execute(q);conn.commit();z = cur.fetchall();print(z)
+    cur.execute(q);conn.commit()
 
 
 
