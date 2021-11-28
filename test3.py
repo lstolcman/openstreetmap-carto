@@ -32,14 +32,12 @@ q = r'''
 INSERT INTO
     public.planet_osm_red_blue_intersection ("osmc:symbol", way)
 VALUES (
-    'red:white:red_bar;blue:white:blue_bar',(
+    'red:white:red_bar',(
     SELECT
-        ST_LineMerge(ST_Intersection(a.way,b.way))
+        ST_LineMerge(ST_Difference(a.way,b.way))
     FROM 
         (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = 'red:white:red_bar')) AS way) AS a,
-        (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = 'blue:white:blue_bar')) AS way) AS b
-    WHERE
-        ST_Intersects(a.way, b.way)
+        (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" != 'red:white:red_bar')) AS way) AS b
     )
 )
 '''
