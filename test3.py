@@ -34,8 +34,8 @@ INSERT INTO
 SELECT
     ST_LineMerge(ST_Intersection(a.way,b.way))
 FROM 
-    (SELECT st_union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" LIKE 'red%:white:%_bar')) AS way) AS a,
-    (SELECT st_union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" LIKE 'blue%:white:%_bar')) AS way) AS b
+    (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" LIKE 'red%:white:%_bar')) AS way) AS a,
+    (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" LIKE 'blue%:white:%_bar')) AS way) AS b
 WHERE
     ST_Intersects(a.way, b.way)
 '''
@@ -64,9 +64,9 @@ q = r'''
 INSERT INTO
     public.planet_osm_red (way)
 SELECT
-    (st_dump(ST_Difference(a.way, b.way))).geom
+    (ST_Dump(ST_Difference(a.way, b.way))).geom
 FROM
-    (SELECT st_union(way) as way FROM planet_osm_line WHERE "osmc:symbol" LIKE 'red%:white:%_bar') AS a,
+    (SELECT ST_Union(way) as way FROM planet_osm_line WHERE "osmc:symbol" LIKE 'red%:white:%_bar') AS a,
     (SELECT * FROM planet_osm_red_blue_intersection) AS b
 
 '''
