@@ -26,23 +26,19 @@ conn.commit()
 
 
 
-q='SELECT \
-ST_LineMerge(st_intersection(a.way,b.way)) \
-FROM  \
-(select st_union(array(select way from planet_osm_line where "osmc:symbol" like \'red%:white:%_bar\')) as way) as a, \
-(select st_union(array(select way from planet_osm_line where "osmc:symbol" like \'blue%:white:%_bar\')) as way) as b \
-WHERE st_intersects(a.way, b.way)'
+q=r'''
+insert into public.planet_osm_red_blue_intersection (way)
+    SELECT
+        ST_LineMerge(st_intersection(a.way,b.way))
+    FROM 
+        (select st_union(array(select way from planet_osm_line where "osmc:symbol" like 'red%:white:%_bar')) as way) as a,
+        (select st_union(array(select way from planet_osm_line where "osmc:symbol" like 'blue%:white:%_bar')) as way) as b
+    WHERE
+        st_intersects(a.way, b.way)
+'''
 # conn.commit();cur.execute(q);conn.commit();z = cur.fetchall();print(z)
 cur.execute(q);conn.commit()
 red_blue_intersection_multilinestring = cur.fetchall()
-
-
-q = f'insert into public.planet_osm_red_blue_intersection (way) VALUES (\'{red_blue_intersection_multilinestring[0][0]}\');'
-cur.execute(q)
-conn.commit()
-
-
-
 
 # create new table - for blue-red intersections
 q = 'DROP TABLE planet_osm_red;'
