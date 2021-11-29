@@ -52,28 +52,35 @@ for bar_color in bars_colors:
 
 
 
-## not quite working, PoC!
-
+## working routes rendering for intersection of 2 routes
 bars_comb2 = list(itertools.combinations(bars_colors,2))
-bars_comb2 = [('red:white:red_bar', 'blue:white:blue_bar')]
 
 for bar_color1, bar_color2 in bars_comb2:
     bar_color_combined = f'{bar_color1};{bar_color2}'
     print(f'{bar_color_combined=}')
+    bars_want = set({bar_color1, bar_color2})
+    bars_dont_want = set(bars_colors) - bars_want
+    bars_want = list(bars_want)
+    bars_dont_want = list(bars_dont_want)
     q = f'''
     INSERT INTO
         public.planet_osm_bars ("osmc:symbol", way)
     VALUES (
         '{bar_color_combined}',(
         SELECT
-            ST_LineMerge(ST_Intersection(a.way,b.way))
+            -- ST_Difference(ST_Intersection(a.way,b.way), ST_Union(array[c.way, d.way, e.way])) -- (A n B) - (C u D u E) = 3,3s
+            ST_LineMerge(ST_Difference(ST_Difference(ST_Difference(ST_Intersection(a.way,b.way), c.way), d.way), e.way)) -- (A n B) - C - D - E = 1,6s
+            
         FROM 
-            (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bar_color1}')) AS way) AS a,
-            (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bar_color2}')) AS way) AS b
+            (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_want[0]}')) AS way) AS a,
+            (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_want[1]}')) AS way) AS b,
+            (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_dont_want[0]}')) AS way) AS c,
+            (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_dont_want[1]}')) AS way) AS d,
+            (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_dont_want[2]}')) AS way) AS e
         )
     )
     '''
-    # conn.commit();cur.execute(q);conn.commit();z = cur.fetchall();print(z)
+    # # conn.commit();cur.execute(q);conn.commit();z = cur.fetchall();print(z)
     cur.execute(q);conn.commit()
 
 
