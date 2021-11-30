@@ -47,7 +47,7 @@ for bar_color in bars_colors:
         {bar_color==bars_colors[4]},
         (
             SELECT
-                ST_LineMerge(ST_Difference(a.way,b.way))
+                ST_Multi(ST_LineMerge(ST_Difference(a.way,b.way)))
             FROM 
                 (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bar_color}')) AS way) AS a,
                 (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" != '{bar_color}')) AS way) AS b
@@ -78,7 +78,7 @@ for bar_color1, bar_color2 in bars_comb2:
         (
             SELECT
                 -- ST_Difference(ST_Intersection(a.way,b.way), ST_Union(array[c.way, d.way, e.way])) -- (A n B) - (C u D u E) = 3,3s
-                ST_LineMerge(ST_Difference(ST_Difference(ST_Difference(ST_Intersection(a.way,b.way), c.way), d.way), e.way)) -- (A n B) - C - D - E = 1,6s
+                ST_Multi(ST_LineMerge(ST_Difference(ST_Difference(ST_Difference(ST_Intersection(a.way,b.way), c.way), d.way), e.way))) -- (A n B) - C - D - E = 1,6s
                 
             FROM 
                 (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_want[0]}')) AS way) AS a,
@@ -113,7 +113,7 @@ for bar_color1, bar_color2, bar_color3 in bars_comb3:
         {bars_colors[4] in bar_color_combined},
         (
             SELECT
-                ST_LineMerge(ST_Difference(ST_Difference(ST_Intersection(ST_Intersection(a.way,b.way), c.way), d.way), e.way)) -- (A n B n C) - D - E
+                ST_Multi(ST_LineMerge(ST_Difference(ST_Difference(ST_Intersection(ST_Intersection(a.way,b.way), c.way), d.way), e.way))) -- (A n B n C) - D - E
                 
             FROM 
                 (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_want[0]}')) AS way) AS a,
