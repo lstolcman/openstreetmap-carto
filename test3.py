@@ -113,8 +113,7 @@ for bar_color1, bar_color2, bar_color3 in bars_comb3:
         {bars_colors[4] in bar_color_combined},
         (
             SELECT
-                -- ST_Difference(ST_Intersection(a.way,b.way), ST_Union(array[c.way, d.way, e.way])) -- (A n B) - (C u D u E) = 3,3s
-                ST_LineMerge(ST_Difference(ST_Difference(ST_Intersection(ST_Intersection(a.way,b.way), c.way), d.way), e.way)) -- (A n B n C) - D - E = 1,6s
+                ST_LineMerge(ST_Difference(ST_Difference(ST_Intersection(ST_Intersection(a.way,b.way), c.way), d.way), e.way)) -- (A n B n C) - D - E
                 
             FROM 
                 (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_want[0]}')) AS way) AS a,
@@ -122,6 +121,77 @@ for bar_color1, bar_color2, bar_color3 in bars_comb3:
                 (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_want[2]}')) AS way) AS c,
                 (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_dont_want[0]}')) AS way) AS d,
                 (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_dont_want[1]}')) AS way) AS e
+        )
+    )
+    '''
+    cur.execute(q);conn.commit()
+
+
+## working routes rendering for intersection of 4 routes
+bars_comb4 = list(itertools.combinations(bars_colors, 4))
+
+for bar_color1, bar_color2, bar_color3, bar_color4 in bars_comb4:
+    bar_color_combined = f'{bar_color1};{bar_color2};{bar_color3};{bar_color4}'
+    print(f'{bar_color_combined=}')
+    bars_want = set({bar_color1, bar_color2, bar_color3, bar_color4})
+    bars_dont_want = set(bars_colors) - bars_want
+    bars_want = list(bars_want)
+    bars_dont_want = list(bars_dont_want)
+    q = f'''
+    INSERT INTO
+        public.planet_osm_bars (red_bar, green_bar, blue_bar, yellow_bar, black_bar, way)
+    VALUES (
+        {bars_colors[0] in bar_color_combined},
+        {bars_colors[1] in bar_color_combined},
+        {bars_colors[2] in bar_color_combined},
+        {bars_colors[3] in bar_color_combined},
+        {bars_colors[4] in bar_color_combined},
+        (
+            SELECT
+                ST_Multi(ST_LineMerge(ST_Difference(ST_Intersection(ST_Intersection(ST_Intersection(a.way,b.way), c.way), d.way), e.way))) -- (A n B n C n D) - E
+                
+            FROM 
+                (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_want[0]}')) AS way) AS a,
+                (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_want[1]}')) AS way) AS b,
+                (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_want[2]}')) AS way) AS c,
+                (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_want[3]}')) AS way) AS d,
+                (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_dont_want[0]}')) AS way) AS e
+        )
+    )
+    '''
+    cur.execute(q);conn.commit()
+
+
+
+## working routes rendering for intersection of 5 routes
+bars_comb5 = list(itertools.combinations(bars_colors, 5))
+
+for bar_color1, bar_color2, bar_color3, bar_color4, bar_color5 in bars_comb5:
+    bar_color_combined = f'{bar_color1};{bar_color2};{bar_color3};{bar_color4};{bar_color5}'
+    print(f'{bar_color_combined=}')
+    bars_want = set({bar_color1, bar_color2, bar_color3, bar_color4, bar_color5})
+    bars_dont_want = set(bars_colors) - bars_want
+    bars_want = list(bars_want)
+    bars_dont_want = list(bars_dont_want)
+    q = f'''
+    INSERT INTO
+        public.planet_osm_bars (red_bar, green_bar, blue_bar, yellow_bar, black_bar, way)
+    VALUES (
+        {bars_colors[0] in bar_color_combined},
+        {bars_colors[1] in bar_color_combined},
+        {bars_colors[2] in bar_color_combined},
+        {bars_colors[3] in bar_color_combined},
+        {bars_colors[4] in bar_color_combined},
+        (
+            SELECT
+                ST_Multi(ST_LineMerge(ST_Intersection(ST_Intersection(ST_Intersection(ST_Intersection(a.way,b.way), c.way), d.way), e.way))) -- (A n B n C n D n E)
+                
+            FROM 
+                (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_want[0]}')) AS way) AS a,
+                (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_want[1]}')) AS way) AS b,
+                (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_want[2]}')) AS way) AS c,
+                (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_want[3]}')) AS way) AS d,
+                (SELECT ST_Union(array(SELECT way FROM planet_osm_line WHERE "osmc:symbol" IS NOT null AND "osmc:symbol" = '{bars_want[4]}')) AS way) AS e
         )
     )
     '''

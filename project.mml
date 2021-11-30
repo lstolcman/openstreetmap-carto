@@ -2628,6 +2628,170 @@ Layer:
 
 
 
+  # intersections of 4 hiking routes
+  
+  - id: red_green_blue_yellow_bar
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_bars
+          WHERE (
+              red_bar = TRUE AND
+              green_bar = TRUE AND
+              blue_bar = TRUE AND
+              yellow_bar = TRUE AND
+              black_bar = FALSE
+          )
+        ) AS red_green_blue_yellow_bar
+    properties:
+      minzoom: 14
+
+  - id: red_green_blue_black_bar
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_bars
+          WHERE (
+              red_bar = TRUE AND
+              green_bar = TRUE AND
+              blue_bar = TRUE AND
+              yellow_bar = FALSE AND
+              black_bar = TRUE
+          )
+        ) AS red_green_blue_black_bar
+    properties:
+      minzoom: 14
+
+  - id: red_blue_yellow_bar
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_bars
+          WHERE (
+              red_bar = TRUE AND
+              green_bar = FALSE AND
+              blue_bar = TRUE AND
+              yellow_bar = TRUE AND
+              black_bar = FALSE
+          )
+        ) AS red_blue_yellow_bar
+    properties:
+      minzoom: 14
+
+  - id: red_green_yellow_black_bar
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_bars
+          WHERE (
+              red_bar = TRUE AND
+              green_bar = TRUE AND
+              blue_bar = FALSE AND
+              yellow_bar = TRUE AND
+              black_bar = TRUE
+          )
+        ) AS red_green_yellow_black_bar
+    properties:
+      minzoom: 14
+
+  - id: red_yellow_black_bar
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_bars
+          WHERE (
+              red_bar = TRUE AND
+              green_bar = FALSE AND
+              blue_bar = FALSE AND
+              yellow_bar = TRUE AND
+              black_bar = TRUE
+          )
+        ) AS red_yellow_black_bar
+    properties:
+      minzoom: 14
+
+  - id: red_blue_yellow_black_bar
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_bars
+          WHERE (
+              red_bar = TRUE AND
+              green_bar = FALSE AND
+              blue_bar = TRUE AND
+              yellow_bar = TRUE AND
+              black_bar = TRUE
+          )
+        ) AS red_blue_yellow_black_bar
+    properties:
+      minzoom: 14
+
+  - id: green_blue_yellow_black_bar
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_bars
+          WHERE (
+              red_bar = FALSE AND
+              green_bar = TRUE AND
+              blue_bar = TRUE AND
+              yellow_bar = TRUE AND
+              black_bar = TRUE
+          )
+        ) AS green_blue_yellow_black_bar
+    properties:
+      minzoom: 14
+
+
+  # intersections of 5 hiking routes
+  
+  - id: red_green_blue_yellow_black_bar
+    geometry: linestring
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: |-
+        (SELECT
+            way
+          FROM planet_osm_bars
+          WHERE (
+              red_bar = TRUE AND
+              green_bar = TRUE AND
+              blue_bar = TRUE AND
+              yellow_bar = TRUE AND
+              black_bar = TRUE
+          )
+        ) AS red_green_blue_yellow_black_bar
+    properties:
+      minzoom: 14
 
   # hiking routes end
 
