@@ -42,6 +42,7 @@ Stylesheet:
   - style/road-colors-generated.mss
   - style/roads.mss
   - style/power.mss
+  - style/hiking-routes.mss
   - style/placenames.mss
   - style/buildings.mss
   - style/stations.mss
