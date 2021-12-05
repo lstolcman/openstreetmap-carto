@@ -1,6 +1,10 @@
-# OpenStreetMap Carto
+# OpenStreetMap Carto PLTopo
 
-![screenshot](https://raw.github.com/gravitystorm/openstreetmap-carto/master/preview.png)
+![screenshot](preview.png)
+
+Modification based on OSM-Carto, showing hiking routes, similar to the method used on Polish mountain maps.
+
+## 
 
 These are the CartoCSS map stylesheets for the Standard map layer on [OpenStreetMap.org](https://www.openstreetmap.org).
 
